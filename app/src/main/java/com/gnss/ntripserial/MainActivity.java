@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gnss.ntripserial.Utils.FileIOUtils;
+import com.gnss.ntripserial.Utils.GGAParse;
 import com.gnss.ntripserial.net.NtripHandler;
 import com.gnss.ntripserial.net.ReceiverThread;
 
@@ -69,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText user;
     private EditText password;
     private EditText mount_point;
+    private TextView tv_sat_num;
+    private TextView tv_position;
+    private TextView tv_status;
+    private TextView tv_age;
+    private TextView tv_utc;
     private Context context;
 
     //serial
@@ -120,6 +126,12 @@ public class MainActivity extends AppCompatActivity {
         user = findViewById(R.id.user);
         password = findViewById(R.id.password);
         mount_point = findViewById(R.id.mount_point);
+
+        tv_sat_num = findViewById(R.id.sat_num);
+        tv_position = findViewById(R.id.sat_info_position);
+        tv_status = findViewById(R.id.sat_info_status);
+        tv_age = findViewById(R.id.sat_info_age);
+        tv_utc = findViewById(R.id.timeUTC);
 
         accountInfo = super.getSharedPreferences("account_info",MODE_PRIVATE);
         autoFillAccount();
@@ -244,10 +256,12 @@ public class MainActivity extends AppCompatActivity {
                                 }else if (s.contains("Unauthorized")){
                                     runOnUiThread(() -> {
                                         StartButtonCtrl(false);
+                                        setLoginStatus(false);
                                         Toast.makeText(MainActivity.this,
                                                 "登录失败:用户名密码错误", Toast.LENGTH_SHORT).show();
                                     });
                                 }else{
+                                    Log.d(TAG,s);
                                     if (serial_opened){
                                         runOnUiThread(() -> {
                                             setNetworkStatus(true);
@@ -265,6 +279,8 @@ public class MainActivity extends AppCompatActivity {
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
                 if (msg.what==ReceiverThread.NO_NETWORK)
+                    setLoginStatus(false);
+                    StartButtonCtrl(false);
                     Toast.makeText(MainActivity.this, "无网络", Toast.LENGTH_SHORT).show();
             }
         });
@@ -303,9 +319,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void initStatus(){
-        setNetworkStatus(channelHandlerContext != null);
+        setNetworkStatus(false);
         setSerialOpenStatus(false);
-        setLoginStatus(false);
+        setLoginStatus(channelHandlerContext != null);
         setSerialStatus(false);
         tv_ntrip_info.setText("0 bytes");
         tv_serial_info.setText("0 bytes");
@@ -472,9 +488,21 @@ public class MainActivity extends AppCompatActivity {
                     String serial_receive = String.format(Locale.CHINA,"%d bytes",finalString.length());
                     tv_serial_info.setText(serial_receive);
                     if (channelHandlerContext!=null && finalString.contains("GNGGA")) {
+                        setSerialOpenStatus(true);
+                        setLoginStatus(true);
                         try {
+                            GGAParse ggaParse = new GGAParse(finalString).parse();
+                            String satNum = ggaParse.getSat_num()+"颗";
+                            tv_sat_num.setText(satNum);
+                            tv_position.setText(String.format("经纬高：%s %s %s",
+                                    ggaParse.getLongitude(),ggaParse.getLatitude(),ggaParse.getH()));
+                            tv_status.setText(String.format("状态：%s",ggaParse.getStatus()));
+                            tv_age.setText(String.format("差分龄期：%s",ggaParse.getAge()));
+                            tv_utc.setText(ggaParse.getUTC());
                             channelHandlerContext.writeAndFlush(Unpooled.copiedBuffer(finalString, CharsetUtil.UTF_8)).sync();
-                        } catch (InterruptedException e) {
+                        }catch (RuntimeException e){
+                            e.printStackTrace();
+                        }catch (InterruptedException e) {
                             FileIOUtils.WriteErrReport(getExternalFilesDir(null),e,"channel send");
                             e.printStackTrace();
                         }
@@ -488,6 +516,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             Log.d(TAG,"串口关闭");
+            serial_opened = false;
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

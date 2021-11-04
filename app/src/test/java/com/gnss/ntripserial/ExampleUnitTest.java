@@ -1,5 +1,7 @@
 package com.gnss.ntripserial;
 
+import com.gnss.ntripserial.Utils.GGAParse;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,6 +14,7 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+        GGAParse ggaParse = new GGAParse("$GPGGA,161229.487,3723.2475,N,12158.3416,W,1,07,1.0,9.0,M, , , ,0000*18").parse();
+
     }
 }

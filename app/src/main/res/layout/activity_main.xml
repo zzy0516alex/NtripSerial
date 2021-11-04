@@ -294,7 +294,8 @@
                 android:text="网络接收:"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"/>
             <TextView
                 android:id="@+id/ntrip_info"
                 android:layout_width="wrap_content"
@@ -302,7 +303,8 @@
                 android:text="0 bytes"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
         <LinearLayout
@@ -311,9 +313,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"
             android:orientation="horizontal"
-            android:layout_below="@id/ntrip_info_container">
+            android:layout_below="@+id/ntrip_info_container">
             <ImageView
                 android:id="@+id/serial_connect"
                 android:layout_width="wrap_content"
@@ -326,7 +327,8 @@
                 android:text="串口接收:"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"/>
             <TextView
                 android:id="@+id/serial_info"
                 android:layout_width="wrap_content"
@@ -334,7 +336,104 @@
                 android:text="0 bytes"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/time_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal"
+            android:layout_below="@+id/serial_info_container">
+            <ImageView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/time"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UTC:"
+                android:layout_marginStart="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timeUTC"
+                android:text="00:00:00.000"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:textSize="16sp"
                 android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sat_info_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:orientation="horizontal"
+            android:layout_below="@id/time_container">
+            <ImageView
+                android:id="@+id/sat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/sat"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/sat_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0颗"
+                android:layout_marginStart="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/sat_info_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="状态：未知"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/sat_info_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="差分时间：00000s"
+                android:layout_marginStart="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/sat_info_container2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="7dp"
+            android:orientation="horizontal"
+            android:layout_below="@id/sat_info_container">
+            <TextView
+                android:id="@+id/sat_info_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="经纬高：00°00.0000'E   00°00.0000'N   0000.0m"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
     </RelativeLayout>
